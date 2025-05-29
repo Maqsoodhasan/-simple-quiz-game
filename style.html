@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript Quiz Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #14cfc6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .quiz-container {
+      background: #129494;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(17, 120, 36, 0.2);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 50px;
+    }
+
+    .option {
+      display: block;
+      background: #7a0e17;
+      border: none;
+      padding: 15px;
+      margin: 15px 0;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    .option:hover {
+      background: #8b4b4b;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    #restart {
+      margin-top: 25px;
+      padding: 15px 25px;
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #restart:hover {
+      background: #093666;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2 id="question">Loading question...</h2>
+    <div id="options"></div>
+    <div id="result"></div>
+    <button id="restart" style="display:none;" onclick="startQuiz()">Restart</button>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What does HTML stand for?",
+        options: ["HyperText Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "HighText Machine Language"],
+        answer: "HyperText Markup Language"
+      },
+      {
+        question: "Which language is used for styling web pages?",
+        options: ["HTML", "JQuery", "CSS", "XML"],
+        answer: "CSS"
+      },
+      {
+        question: "Which is not a JavaScript framework?",
+        options: ["React", "Angular", "Vue", "Django"],
+        answer: "Django"
+      },
+      {
+        question: "Inside which HTML element do we put the JavaScript?",
+        options: ["<js>", "<script>", "<javascript>", "<code>"],
+        answer: "<script>"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function startQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      document.getElementById("result").innerText = "";
+      document.getElementById("restart").style.display = "none";
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById("question").innerText = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.innerText = option;
+        btn.onclick = () => selectAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(selected) {
+      if (selected === quizData[currentQuestion].answer) {
+        score++;
+      }
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("question").innerText = "Quiz Completed!";
+      document.getElementById("options").innerHTML = "";
+      document.getElementById("result").innerText = `Your Score: ${score} / ${quizData.length}`;
+      document.getElementById("restart").style.display = "inline-block";
+    }
+
+    // Start the quiz on load
+    startQuiz();
+  </script>
+</body>
+</html>
